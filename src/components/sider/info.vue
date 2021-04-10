@@ -9,7 +9,28 @@
     <div class="link-font">
       <p>LINK ME:</p>
     </div>
-    <div></div>
+    <ul class="link-icons">
+      <li class="cycle-icon">
+        <span>
+          <i class="iconfont20 icon-me"></i>
+        </span>
+      </li>
+      <li class="cycle-icon">
+        <span>
+          <i class="iconfont20 icon-qqfuben"></i>
+        </span>
+      </li>
+      <li class="cycle-icon">
+        <span>
+          <i class="iconfont20 icon-wechat"></i>
+        </span>
+      </li>
+      <li class="cycle-icon">
+        <span>
+          <i class="iconfont20 icon-github"></i>
+        </span>
+      </li>
+    </ul>
   </el-card>
 </template>
 
@@ -37,5 +58,24 @@ export default {
 .avatar .avatar-img:hover {
   transition: all 1.5s;
   transform: rotate(360deg);
+}
+.link-font {
+  font-size: 14px;
+  margin: 10px 0;
+}
+.link-icons {
+  list-style: none;
+}
+.cycle-icon {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid #c8cccf;
+  line-height: 40px;
+  margin-left: 10px;
+}
+.cycle-icon i {
+  color: rgba(0, 0, 0, 0.5);
 }
 </style>

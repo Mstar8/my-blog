@@ -20,7 +20,9 @@
     </div>
     <div class="headimgbox">
       <div class="welcome">
-        <span>{{ welcomeText }}</span>
+        <typewriter :text="welcomeText" 
+        :wspeed="200"
+        :isBack="true"></typewriter>
       </div>
     </div>
   </div>
@@ -28,49 +30,21 @@
 
 <script>
 import { getScrollTop } from "@/utils/utils";
+import Typewriter from '../util/typewriter.vue';
 export default {
   name: "header",
   data() {
     return {
-      text: "Welcome, My Friend!",
-      texts: ["Welcome", "Hi, Friend!"],
-      welcomeText: "",
-      currentTextCount: 1,
-      currentTextArrayIndex: 0,
-      timer: Object,
+      welcomeText: "Hi, Friend!",
       activeIndex: "1",
       show: false,
       visible: false,
     };
   },
   mounted() {
-    this.timer = setInterval(this.typewriter, 150);
-    this.$nextTick(() => this.timer);
     window.addEventListener("scroll", this.scrollHandler);
   },
   methods: {
-    // 首页欢迎语打字机效果
-    typewriter() {
-      // 先判断当前在打印那个
-      if (this.currentTextArrayIndex >= this.texts.length) {
-        clearInterval(this.timer);
-        return;
-      }
-      if (
-        // 打印
-        this.currentTextCount <= this.texts[this.currentTextArrayIndex].length
-      ) {
-        this.welcomeText = this.texts[this.currentTextArrayIndex].substring(
-          0,
-          this.currentTextCount
-        );
-        this.currentTextCount++;
-      } else {
-        // 当前字符串打印完，指向下一个并把索引归0
-        this.currentTextArrayIndex++;
-        this.currentTextCount = 0;
-      }
-    },
     scrollHandler() {
       if (getScrollTop() >= 150 && this.visible == false) {
         setTimeout(() => {
@@ -81,10 +55,13 @@ export default {
       }
     },
   },
-  components: {},
+  components: {
+    Typewriter
+  },
 };
 </script>
 
+    Typewriter
 <style scoped>
 /**总体定位 */
 .nav-header {
@@ -93,7 +70,7 @@ export default {
   left: 0;
   z-index: 2000;
   width: 100%;
-  background-color: #fff;
+  background-color: rgb(255, 255, 255);
 }
 /**内容定位 */
 .nav-header .container {
@@ -130,26 +107,7 @@ export default {
   cursor: pointer;
   outline: none;
 }
-.container .item-searchbox .search-icon {
-  color: black;
-  padding-left: 10px;
-}
 
-.container .item-searchbox .search-input {
-  width: 180px;
-  padding: 10px 20px;
-  position: absolute;
-  background-color: #fff;
-  right: 0;
-  top: 40px;
-  opacity: 0;
-  visibility: hidden;
-}
-
-
->>> .el-input__inner {
-  height: 35px;
-}
 /*字体颜色 */
 .container ul li.el-menu-item,
 .el-menu-header .el-menu-item:hover {
@@ -158,8 +116,8 @@ export default {
 
 /**图片设计 */
 .headimgbox {
-  background-image: url(http://139.196.32.107/images/head_bg2.jpg);
-  height: 550px;
+  background-image: url(http://139.196.32.107/images/head_bg3.jpg);
+  height: 758px;
   background-size: cover;
   background-position: center 50%;
   background-repeat: no-repeat;
