@@ -42,7 +42,6 @@ export default {
     this.typewriter();
   },
   unmounted() {
-    console.log("销毁" + this.timer);
     clearInterval(this.timer);
   },
   methods: {
@@ -58,7 +57,6 @@ export default {
       } else if (this.text != null && this.texts == null) {
         // 打印字符
         this.timer = setInterval(this.writerString, this.wspeed);
-        console.log(this.timer);
       } else if (this.texts != null && this.text != null) {
         // 两者都有打印字符数组
         this.timer = setInterval(this.writerArray, this.wspeed);

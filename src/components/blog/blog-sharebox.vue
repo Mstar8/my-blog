@@ -1,70 +1,79 @@
 <template>
   <div class="sharelist">
-    <el-row>
+    <el-row type="flex" aligin="middle">
       <el-col
         :span="24"
-        class="share-comment"
         v-for="(item, index) in shareList"
         :key="index"
+        class="share-comment"
+        @mouseleave="downFloatHandle(item)"
+        @mouseenter="upFloatHandle(item)"
+        :class="animateStyle(item)"
       >
         <!-- 时间 -->
         <div class="a-time">
-          <div class="time-hm">
+          <div class="f-fr">
             <i class="el-icon-time"></i> {{ item.date.time }}
           </div>
-          <div class="time-dmy">
+          <div class="time-dmy f-fl">
             <span class="day">{{ item.date.day }}</span>
             <span class="month fs-18">{{ item.date.month }}月</span>
             <span class="year fs-18 ml10">{{ item.date.year }}</span>
           </div>
         </div>
-        <div></div>
         <!-- 文章图像 -->
         <div class="a-image cover-img" v-if="item.imgUrl">
           <img :src="item.imgUrl" />
         </div>
+
+        <!--文章 -->
         <div class="a-content">
+          <!-- 标题 -->
           <div class="a-title">
             <h3>
               <a>{{ item.title }}</a>
             </h3>
           </div>
+          <!-- 文章信息 -->
+          <div class="a-info f-oh">
+            <div class="f-di tags">
+              <i class="iconfont12 icon-tag"></i>
+              <a
+                v-for="(tag, tagIndex) in item.tags"
+                :key="tagIndex"
+                class="tag"
+                >{{ tag }}</a
+              >
+            </div>
+            <div class="f-di">
+              <span>
+                <i class="iconfont12 icon-view ml10">{{
+                  " " + item.views + " 浏览"
+                }}</i>
+              </span>
+              <span>
+                <i class="iconfont12 icon-aixin ml10">
+                  {{ " " + item.likes + " 喜欢" }}</i
+                >
+              </span>
+              <span>
+                <i class="iconfont12 icon-xiaoxi ml10">
+                  <a style="border-bottom: 1px dashed #787977">{{
+                    " " + item.comments + " 评论"
+                  }}</a>
+                </i>
+              </span>
+            </div>
+          </div>
+          <!-- 文章简介 -->
           <div class="a-intro">
             <p>{{ item.introduction }}</p>
           </div>
         </div>
-        <!-- 清楚浮动 -->
-        <br clear="all" />
-        <div class="a-viewmore" style="margin: 25px 0">
-          <el-divider content-position="right">
-            <a class="fs-18 f-fwb"
-              >阅读更多 <i class="el-icon-d-arrow-right"></i
-            ></a>
-          </el-divider>
-        </div>
-        <div class="a-info f-oh">
-          <div class="f-fl tags">
-            <i class="el-icon-link"></i>
-            <a
-              v-for="(tag, tagIndex) in item.tags"
-              :key="tagIndex"
-              class="tag"
-              >{{ tag }}</a
-            >
-          </div>
-          <div class="f-fr">
-            <span>
-              <i class="el-icon-view">{{ " " + item.views }}</i>
-            </span>
-            <span>
-              <i class="iconfont icon-aixin ml20"> {{ " " + item.likes }}</i>
-            </span>
-            <span>
-              <i class="iconfont icon-xiaoxi ml20">
-                {{ " " + item.comments }}</i
-              >
-            </span>
-          </div>
+
+        <!-- 查看更多 -->
+        <div class="a-viewmore">
+          <a>-阅读全文-</a>
         </div>
       </el-col>
     </el-row>
@@ -74,11 +83,23 @@
 <script>
 import { getArticles } from "../../api/article";
 export default {
+  components: {},
   name: "blog-sharebox",
   data() {
     return {
       shareList: [],
+      blogMouseFlag: [],
     };
+  },
+  computed: {
+    animateStyle() {
+      return function (item) {
+        if (item.mouseFlag == null) {
+          return null;
+        }
+        return item.mouseFlag == "down" ? "downstyle" : "upstyle";
+      };
+    },
   },
   methods: {
     routerChage() {
@@ -91,6 +112,9 @@ export default {
         .then((res) => {
           //   console.log(res);
           that.shareList = res.data;
+          // 填充鼠标操作数组
+          // this.blogMouseFlag = new Array(this.shareList.length).fill(null);
+          this.shareList.forEach((blog) => (blog["mouseFlag"] = null));
         })
         .catch((err) => {
           //   console.log("出现错误" + err);
@@ -102,8 +126,16 @@ export default {
           });
         });
     },
+    // 动画特效处理
+    upFloatHandle(item) {
+      item.mouseFlag = "up";
+    },
+    downFloatHandle(item) {
+      if (item.mouseFlag === "up") {
+        item.mouseFlag = "down";
+      }
+    },
   },
-  components: {},
   created() {
     let that = this;
     that.routerChage();
@@ -113,26 +145,24 @@ export default {
 
 <style scoped>
 @import "../../assets/style/blog-common.css";
+@import "../../assets/style/animation.css";
+
 .share-comment {
   position: relative;
-  padding: 15px;
-  background-color: white;
+  padding: 30px 15px;
+  background-color: rgb(255, 255, 255, 0.5);
   font-size: 15px;
   margin-bottom: 40px;
-  box-shadow: 0 0 10px rgb(0 0 0 / 15%);
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 5%);
   overflow: hidden;
 }
-
 .a-time {
   width: 100%;
   line-height: 32px;
-  background-color: white;
   overflow: hidden;
   font-family: SourceCodeProRegular, Menlo, Monaco, Consolas, Courier New,
     monospace, Helvetica Neue, Arial, sans-serif;
-}
-.a-time .time-dmy {
-  float: right;
 }
 .a-time .time-dmy .day {
   display: block;
@@ -147,20 +177,7 @@ export default {
 .a-time .year {
   color: #989997;
 }
-.a-time .time-hm {
-  float: left;
-}
 
-.a-image {
-  display: block;
-  margin-top: 18px;
-  margin-right: 20px;
-  border: 1px solid #e8e9e7;
-  width: 300px;
-  height: 200px;
-  float: left;
-  overflow: hidden;
-}
 .a-image img {
   width: 100% !important;
   height: 100% !important;
@@ -168,30 +185,59 @@ export default {
   display: block;
 }
 
+.a-info {
+  color: #787977;
+  margin-bottom: 10px;
+}
+.a-info .tags {
+  margin-right: 10px;
+}
+
+.a-info .tags .tag {
+  display: inline-block;
+  font-size: 12px;
+  margin: 0 2px;
+  border-bottom: 1px dashed #787977;
+}
+
+.a-image {
+  display: block;
+  width: 500px;
+  height: 200px;
+  overflow: hidden;
+  margin: 10px auto;
+  border-radius: 5px;
+  box-shadow: 0 0px 10px rgb(0 0 0 / 15%);
+}
+
 .a-content {
   padding: 0 20px;
-  text-align: left;
   min-height: 200px;
   overflow: hidden;
 }
 .a-content .a-title h3 {
-  font-size: 24px;
-  margin-top: 10px;
-  margin-bottom: 18px;
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 5px;
 }
 .a-content .a-intro p {
+  text-align: left;
+  text-indent: 2em;
   line-height: 26px;
 }
-
-.a-info {
-  color: #787977;
+.a-viewmore {
+  margin: 15px 0;
 }
-.a-info .tags .tag {
-  display: inline-block;
+.a-viewmore a {
   font-size: 12px;
-  background-color: #f1f2f0;
-  color: #787977;
-  margin: 2px;
-  padding: 2px 5px;
+  padding: 8px 10px;
+  border: 1px solid #787977;
+  cursor: pointer;
+  border-radius: 5px;
 }
+.a-viewmore a:hover {
+  background-color: black;
+  color: white;
+}
+
 </style>

@@ -1,19 +1,23 @@
 <template>
   <div>
-    <nav-header></nav-header>
+    <nav-head></nav-head>
     <div class="container">
-      <el-row :gutter="20" style="margin-left: -10px; margin-right: -10px">
+    <font-info title="文章" content="会当临绝顶，一览众山小"/>
+      <el-row :gutter="20">
         <el-col :span="18"><blog-sharebox></blog-sharebox></el-col>
-        <el-col :span="6"><blog-right></blog-right></el-col>
+        <el-col :span="6"><blog-right/></el-col>
       </el-row>
     </div>
+    <back-top />
   </div>
 </template>
 
 <script>
-import NavHeader from "../components/blog/header";
+import NavHead from "../components/blog/header";
 import BlogSharebox from "../components/blog/blog-sharebox";
-import BlogRight from '../components/blog/blog-right.vue';
+import BackTop from "../components/sider/back-top.vue";
+import FontInfo from '../components/blog/font-info.vue';
+import BlogRight from "../components/blog/blog-right";
 export default {
   name: "home",
   data() {
@@ -21,8 +25,10 @@ export default {
   },
   methods: {},
   components: {
-    NavHeader,
+    NavHead,
     BlogSharebox,
+    BackTop,
+    FontInfo,
     BlogRight,
   },
 };

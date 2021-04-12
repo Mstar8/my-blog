@@ -1,0 +1,40 @@
+/* sharebox使用 */
+
+@keyframes upFloat {
+    from {}
+    to {
+        transform: translate(0, -5px);
+        transition-delay: 0s !important;
+        /* box-shadow: 0 1px 10px rgb(0 0 0 / 15%); */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 30%);
+    }
+}
+
+@keyframes downFloat {
+    from {
+        transform: translate(0, -5px);
+        transition-delay: 0s !important;
+    }
+    to {}
+}
+
+.upstyle {
+    animation: 0.5s upFloat;
+    animation-fill-mode: forwards;
+}
+
+.downstyle {
+    animation: 0.5s downFloat;
+    animation-fill-mode: forwards;
+}
+
+/* transition实现 */
+
+.upfloat {
+    transition: transform 0.5s ease-in;
+}
+
+.upfloat:hover {
+    transform: translate(0, -5px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 30%);
+}

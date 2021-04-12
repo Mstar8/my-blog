@@ -1,7 +1,7 @@
 import axios from "axios";
 
 let config = {
-    baseURL: "http://localhost:8089",
+    baseURL: "http://localhost:8090",
     timeout: 60 * 1000, // Timeout
 };
 
